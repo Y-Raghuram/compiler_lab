@@ -1,0 +1,53 @@
+import java.io.*;
+class Main
+  	{
+	public static void main(String args[]) throws IOException
+		{
+		IdLexer lex = new IdLexer(new FileReader("input"));
+		Token token = lex.yylex();
+		while(token.text != null)
+			{
+			token = lex.yylex();
+			}
+		}
+	}
+class Token
+	{
+	String text;
+	Token (String t) {text = t;}
+	}
+%%
+%public
+%class IdLexer
+%type void
+%eofval{
+	return new Token(null);
+%eofval}
+%type Token
+
+%%
+
+[\"\'][a-zA-Z0-9]*[\'\"] {System.out.println(yytext() + "\t\t:String ");}
+[0-9]+ {System.out.println(yytext() + "\t\t:Integer ");}
+[0-9]+"."[0-9]+ {System.out.println(yytext() + "\t\t:Float ");}
+"++" {System.out.println(yytext() + "\t\t:Increment Operator ");}
+"--" {System.out.println(yytext() + "\t\t:Decrement Operator ");}
+\{  {System.out.println(yytext() + "\t\t:Left curly braces ");}
+\}  {System.out.println(yytext() + "\t\t:Right curly braces ");}
+[(] {System.out.println(yytext() + "\t\t:Left paranthesis ");}
+[)] {System.out.println(yytext() + "\t\t:Right paranthesis ");}
+[ \t] {System.out.println("");}
+integer|char|string|float {System.out.println(yytext() + "\t\t:datatypes ");}
+[,;] {System.out.println(yytext() + "\t\t:Punctuation ");}
+[(a-zA-Z)(a-zA-Z|0-9)*] {System.out.println(yytext() + "\t\t:Identifier ");}
+main|var|if|then|else|for|while {System.out.println(yytext() + "\t\t: Keyword ");}
+[=] {System.out.println(yytext() + "\t\t:Assignment Operator ");}
+input {System.out.println(yytext() + "\t\t:Input Function ");}
+output {System.out.println(yytext() + "\t\t:Output Function ");}
+[\+\-\*/] {System.out.println(yytext() + "\t\t:Arithmetic Operator ");}
+[\|][\|]|[&][&] {System.out.println(yytext() + "\t\t:Logical Operator ");}
+[<]|[>]|[=][=]|[!][=] {System.out.println(yytext() + "\t\t:Comparison Operator ");}
+[\n] {System.out.println("NL ");}
+. {System.out.println(yytext() + "\t\t:Unmatched Input ");}
+
+            
